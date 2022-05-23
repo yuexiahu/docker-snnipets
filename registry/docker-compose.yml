@@ -1,0 +1,23 @@
+version: '2.0'
+services:
+  registry:
+    restart: always
+    image: registry:2
+    ports:
+      - 5000:5000
+    volumes:
+      - ./data:/var/lib/registry
+      - ./config/simple.yml:/etc/docker/registry/config.yml
+
+  ui:
+    restart: always
+    image: joxit/docker-registry-ui:latest
+    ports:
+      - 80:80
+    environment:
+      - REGISTRY_TITLE=Wl Private Docker Registry
+      - REGISTRY_URL=http://193.169.200.220:5000
+      - DELETE_IMAGES=true
+      - SINGLE_REGISTRY=true
+    depends_on:
+      - registry
